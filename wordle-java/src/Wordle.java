@@ -1,10 +1,12 @@
+// A simple program to demonstrate
+// Tic-Tac-Toe Game.
 import java.util.*;
 
 public class Wordle {
 
     static String userWordToGuess;
     static Map<Character, Set<Integer>> lettersWithPlacements;
-    static boolean keepPlayingGame = true;
+    static boolean startNewRound = true;
 
     static Scanner in = new Scanner(System.in);
 
@@ -14,16 +16,18 @@ public class Wordle {
 
     public static void main(String[] args)
     {
-        while (keepPlayingGame) {
-            startNewRound();
+        while (startNewRound) {
+            newRound();
         }
         in.close();
     }
 
-    public static void startNewRound() {
+    public static void newRound() {
         getWordAndCreateLetterMap();
-        System.out.println("\n\nYou have " + totalTurns + " turns to guess a " + lettersInWord + "-letter word. Enter q to quit the current round at any time?");
+        System.out.println("Guess a " + lettersInWord + "-letter word. Enter q to quit the current round at any time");
         playGame();
+        System.out.println();
+        System.out.println();
     }
 
     public static void playGame() {
@@ -32,18 +36,18 @@ public class Wordle {
         int numCorrectlyPlacedLetters;
         int [] resultsOfUserInput = new int [lettersInWord]; // 0 = not in word, 1 = in word but wrong placements, 2 = correct placement
 
-        boolean stillPlaying = true;
+        boolean stillPlayingCurrentRound = true;
+        boolean guessedCorrectly = false;
+        boolean quitGame = false;
         int numTurnsLeft = totalTurns;
 
-        while (stillPlaying) {
+        while (stillPlayingCurrentRound) {
+            System.out.println("You have " + numTurnsLeft + " guesses");
             userInput = in.nextLine();
             if (userInput.equals("q")) {
-                System.out.println("You have entered q to quit the current round. Press a to re-start a new round, and Press b to quit the game entirely");
-                userInput = in.nextLine();
-                if (userInput.equals("b")) {
-                    keepPlayingGame = false;
-                }
-                break;
+                stillPlayingCurrentRound = false;
+                quitGame = true;
+                continue;
             }
             if (userInput.length() != lettersInWord) {
                 System.out.println("Please enter a " + lettersInWord + "-letter word");
@@ -71,26 +75,28 @@ public class Wordle {
             System.out.println();
 
             if (numCorrectlyPlacedLetters == lettersInWord) {
-                System.out.println("Congrats! The word was " + userWordToGuess + ". You win in " + (totalTurns - numTurnsLeft + 1) + " guesses");
-                System.out.println("Press a to re-start a new round, and Press b to quit the game entirely");
-                userInput = in.nextLine();
-                if (userInput.equals("b")) {
-                    keepPlayingGame = false;
-                }
-                stillPlaying = false;
+                stillPlayingCurrentRound = false;
+                guessedCorrectly = true;
             }
 
             numTurnsLeft --;
-            System.out.println("You have " + numTurnsLeft + " guesses");
             if (numTurnsLeft == 0) {
-                System.out.println("You did not guess the word correctly. The word was " + userWordToGuess);
-                System.out.println("Press a to re-start a new round, and Press b to quit the game entirely");
-                userInput = in.nextLine();
-                if (userInput.equals("b")) {
-                    keepPlayingGame = false;
-                }
-                stillPlaying = false;
+                stillPlayingCurrentRound = false;
+                guessedCorrectly = false;
             }
+        }
+        if (quitGame) {
+            System.out.println("You have entered q to quit the current round.");
+        }
+        else if (guessedCorrectly) {
+            System.out.println("Congrats! The word was " + userWordToGuess);
+        } else {
+            System.out.println("You did not guess the word correctly. The word was " + userWordToGuess);
+        }
+        System.out.println("Press a to re-start a new round, and Press b to quit the game entirely");
+        userInput = in.nextLine();
+        if (userInput.equals("b")) {
+            startNewRound = false;
         }
     }
 
