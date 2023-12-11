@@ -51,23 +51,11 @@ public class WordsFromApi {
             seperatedWords[i] = seperatedWords[i].replace("\"", "");
         }
 
-        /*
-        System.out.println(seperatedWords[0]);
-        System.out.println(seperatedWords[1]);
-        System.out.println(seperatedWords[2]);
-        System.out.println(seperatedWords[3]);
-        System.out.println(seperatedWords[seperatedWords.length - 1]);
-         */
-
         return seperatedWords;
     }
 
     public static WordsFromApi getInstance() {
         return instance;
-    }
-
-    public String[] getWordsList() {
-        return wordsList;
     }
 
     public String getRandomWordFromList() {
