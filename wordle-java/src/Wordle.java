@@ -1,5 +1,3 @@
-// A simple program to demonstrate
-// Tic-Tac-Toe Game.
 import java.util.*;
 
 public class Wordle {
